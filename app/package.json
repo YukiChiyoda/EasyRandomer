@@ -11,5 +11,8 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "electron": "^13.1.7"
+  },
+  "dependencies": {
+    "vue": "^3.1.5"
   }
 }
