@@ -1,0 +1,15 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "The main package",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "YukiChiyoda",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "electron": "^13.1.7"
+  }
+}
