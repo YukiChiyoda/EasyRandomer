@@ -13,14 +13,44 @@
 
 <body>
     <div id="app">
-        <div id="title">{{ title }}</div>
+        <div id="title">{{ text }}</div>
         <input v-model.number="range[0]">
         <input v-model.number="range[1]">
         <button v-on:click="submit">Submit</button>
-        <button v-on:click="reset">Reset</button>
-        <button v-on:click="rand">Roll!!</button>
+        <button v-on:click="roll">Roll!!</button>
     </div>
     <script>
+        class HashMap {
+            INF = 1000007;
+            constructor() {
+                this.MAP = new Array(this.INF);
+                this.COUNT = 0;
+            }
+            hash(Value) {
+                return (Value >= 0 ? Value : -Value) % this.INF;
+            }
+            has(Value) {
+                const index = this.hash(Value);
+                console.warn('MAP[' + index + ']: ');
+                console.log(this.MAP[index]);
+                if (this.MAP[index] == null) {
+                    this.MAP[index] = new Array();
+                    // this.MAP[index].push(Value);
+                    return false;
+                } else {
+                    for (let i = 0; i < this.MAP[index].length; i++)
+                        if (this.MAP[index][i] == Value)
+                            return true;
+                    // this.MAP[index].push(Value);
+                    return false;
+                }
+            }
+            insert(Value) {
+                const index = this.hash(Value);
+                this.MAP[index].push(Value);
+                this.COUNT++;
+            }
+        };
         function random(minNum, maxNum) {
             return Math.floor(Math.random() * (maxNum - minNum + 1) + minNum);
         }
@@ -28,45 +58,27 @@
             el: '#app',
             data: {
                 range: [0, 0],
-                title: 'EasyRandomer',
-
-                range_bukkit: [],
-                submit_flag: false
+                text: 'EasyRandomer',
             },
             methods: {
                 submit: function () {
-                    // this.submit_flag ^= 1;
-                    this.submit_flag = true;
-                    const range_length = this.range[1] - this.range[0] + 1;
-                    for (let i = 0; i < range_length; i++)
-                        this.range_bukkit.push(this.range[0] + i);
-                    console.log(this.range_bukkit);
-                    let date = new Date();
-                    console.log(date.getMinutes() + ':' + date.getSeconds() + ':' + date.getMilliseconds());
-                    for (let i = 0; i < this.range_bukkit.length; i++) {
-                        const location = random(0, this.range_bukkit.length - i - 1);
-                        this.range_bukkit.push(this.range_bukkit[location]);
-                        this.range_bukkit.splice(location, 1);
-                    }
-                    date = new Date();
-                    console.log(date.getMinutes() + ':' + date.getSeconds() + ':' + date.getMilliseconds());
-                    this.title = '[' + this.range[0] + ', ' + this.range[1] + ']';
+                    delete this.map;
+                    this.map = new HashMap();
+                    this.text = '[' + this.range[0] + ', ' + this.range[1] + ']';
                 },
-                reset: function () {
-                    this.submit_flag = false;
-                    this.range_bukkit.length = 0;
-                    this.title = 'EasyRandomer';
-                },
-                rand: function () {
-                    // this.title = random(this.range[0], this.range[1]);
-                    if (this.range_bukkit.length == 0) {
-                        this.title = 'NULL';
-                        window.alert('Bukkit spill out. Please reset.')
+                roll: function () {
+                    if (this.map.COUNT == this.range[1] - this.range[0] + 1) {
+                        window.alert('Bukkit Spill Out');
                         return;
                     }
-                    const location = random(0, this.range_bukkit.length - 1);
-                    this.title = this.range_bukkit[location];
-                    this.range_bukkit.splice(location, 1);
+                    for (; ;) {
+                        const temp = random(this.range[0], this.range[1]);
+                        if (!this.map.has(temp)) {
+                            this.map.insert(temp);
+                            this.text = String(temp);
+                            break;
+                        }
+                    }
                 }
             }
         });
