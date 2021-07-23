@@ -17,6 +17,7 @@ function createWindow() {
 }
 
 app.setAppUserModelId('EasyRandomer');
+app.setfi
 
 app.whenReady().then(() => {
     createWindow();

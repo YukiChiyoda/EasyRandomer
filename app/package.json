@@ -1,16 +1,18 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "The main package",
+  "description": "An Easy Randomer",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "electron-packager . EasyRandomer --platform=win32 --arch=x64 --icon=./src/icon/64.ico --out=./out --asar --app-version=1.0.0 --overwrite --ignore=node_modules"
   },
   "author": "YukiChiyoda",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "electron": "^13.1.7",
+    "electron-packager": "^15.3.0",
     "electron-reloader": "^1.2.1"
   },
   "dependencies": {
