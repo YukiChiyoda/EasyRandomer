@@ -8,20 +8,31 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="vue.js"></script>
     <!-- <script src="main.js"></script> -->
-    <title>EasyRandomer - v1.0.0</title>
+    <!-- <title>EasyRandomer - v1.0.0</title> -->
 </head>
 
 <body>
     <div id="app">
-        <div id="title">{{ text }}</div>
-        <input v-model.number="range[0]">
-        <input v-model.number="range[1]">
-        <button v-on:click="submit">Submit</button>
-        <button v-on:click="roll">Roll!!</button>
+        <div class="shape_box">
+            <div class="shape"></div>
+        </div>
+        <div class="text_box">
+            <div class="title">EasyRandomer</div>
+            <div class="text">{{ text }}</div>
+        </div>
+        <div class="panel_box">
+            <input v-model.number="range[0]" type="number" placeholder="From">
+            <input v-model.number="range[1]" type="number" placeholder="To">
+            <button v-on:click="submit">Submit</button>
+            <button v-on:click="roll">Roll!!</button>
+        </div>
+        <div class="list_box">
+            <textarea readonly="true">{{ list }}</textarea>
+        </div>
     </div>
     <script>
         class HashMap {
-            INF = 1000007;
+            INF = 1e8 + 7;
             constructor() {
                 this.MAP = new Array(this.INF);
                 this.COUNT = 0;
@@ -31,10 +42,10 @@
             }
             has(Value) {
                 const index = this.hash(Value);
-                console.warn('MAP[' + index + ']: ');
-                console.log(this.MAP[index]);
+                // console.warn('MAP[' + index + ']: ');
+                // console.log(this.MAP[index]);
                 if (this.MAP[index] == null) {
-                    this.MAP[index] = new Array();
+                    // this.MAP[index] = new Array();
                     // this.MAP[index].push(Value);
                     return false;
                 } else {
@@ -47,6 +58,10 @@
             }
             insert(Value) {
                 const index = this.hash(Value);
+                if (this.MAP[index] == null)
+                    this.MAP[index] = new Array();
+                else
+                    console.warn('MAP[' + index + '] has been updated');
                 this.MAP[index].push(Value);
                 this.COUNT++;
             }
@@ -57,18 +72,24 @@
         const vm = new Vue({
             el: '#app',
             data: {
-                range: [0, 0],
-                text: 'EasyRandomer',
+                range: [,],
+                text: 'Ready!',
+                list: ''
             },
             methods: {
                 submit: function () {
+                    if (this.range[0] == null || this.range[1] == null || this.range[0] > this.range[1]) {
+                        this.text = 'Error Input';
+                        return;
+                    }
                     delete this.map;
                     this.map = new HashMap();
+                    this.list = '';
                     this.text = '[' + this.range[0] + ', ' + this.range[1] + ']';
                 },
                 roll: function () {
                     if (this.map.COUNT == this.range[1] - this.range[0] + 1) {
-                        window.alert('Bukkit Spill Out');
+                        this.text = "Spill Out";
                         return;
                     }
                     for (; ;) {
@@ -76,6 +97,7 @@
                         if (!this.map.has(temp)) {
                             this.map.insert(temp);
                             this.text = String(temp);
+                            this.list += 'Case [' + this.map.COUNT + ']: ' + temp + '\r\n';
                             break;
                         }
                     }
