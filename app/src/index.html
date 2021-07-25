@@ -27,7 +27,7 @@
             <button v-on:click="roll">Roll!!</button>
         </div>
         <div class="list_box">
-            <textarea id="list" readonly="true">{{ list }}</textarea>
+            <textarea ref="list" readonly="true">{{ list }}</textarea>
         </div>
     </div>
     <script>
@@ -98,7 +98,8 @@
                             this.map.insert(temp);
                             this.text = String(temp);
                             this.list += 'Case [' + this.map.COUNT + ']: ' + temp + '\r\n';
-                            document.getElementById('list').scrollTop = document.getElementById('list').scrollHeight;
+                            // document.getElementById('list').scrollTop = document.getElementById('list').scrollHeight;
+                            this.$refs.list.scrollTop = this.$refs.list.scrollHeight;
                             break;
                         }
                     }
