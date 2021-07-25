@@ -27,7 +27,7 @@
             <button v-on:click="roll">Roll!!</button>
         </div>
         <div class="list_box">
-            <textarea readonly="true">{{ list }}</textarea>
+            <textarea id="list" readonly="true">{{ list }}</textarea>
         </div>
     </div>
     <script>
@@ -67,7 +67,7 @@
             }
         };
         function random(minNum, maxNum) {
-            return Math.floor(Math.random() * (maxNum - minNum + 1) + minNum);
+            return Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
         }
         const vm = new Vue({
             el: '#app',
@@ -98,6 +98,7 @@
                             this.map.insert(temp);
                             this.text = String(temp);
                             this.list += 'Case [' + this.map.COUNT + ']: ' + temp + '\r\n';
+                            document.getElementById('list').scrollTop = document.getElementById('list').scrollHeight;
                             break;
                         }
                     }
