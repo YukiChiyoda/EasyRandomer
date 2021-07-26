@@ -7,12 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="vue.js"></script>
-    <!-- <script src="main.js"></script> -->
+    <script src="decoration.js"></script>
     <!-- <title>EasyRandomer - v1.0.0</title> -->
 </head>
 
 <body>
     <div id="app">
+        <span class="button" v-on:click="repeat">
+            <img src="./icon/repeat-none.svg" alt="Whether the numbers repert" ref="button">
+        </span>
         <div class="shape_box">
             <div class="shape"></div>
         </div>
@@ -29,6 +32,7 @@
         <div class="list_box">
             <textarea ref="list" readonly="true">{{ list }}</textarea>
         </div>
+        <div class="cursor"></div>
     </div>
     <script>
         class HashMap {
@@ -74,7 +78,8 @@
             data: {
                 range: [,],
                 text: 'Ready!',
-                list: ''
+                list: '',
+                flag: false
             },
             methods: {
                 submit: function () {
@@ -88,6 +93,13 @@
                     this.text = '[' + this.range[0] + ', ' + this.range[1] + ']';
                 },
                 roll: function () {
+                    if (this.flag) {
+                        const temp = random(this.range[0], this.range[1]);
+                        this.text = String(temp);
+                        this.list += 'Case [' + this.map.COUNT + ']: ' + temp + '\r\n';
+                        this.$refs.list.scrollTop = this.$refs.list.scrollHeight;
+                        return;
+                    }
                     if (this.map.COUNT == this.range[1] - this.range[0] + 1) {
                         this.text = "Spill Out";
                         return;
@@ -103,6 +115,10 @@
                             break;
                         }
                     }
+                },
+                repeat: function () {
+                    this.flag ^= true;
+                    this.$refs.button.src = this.flag ? './icon/repeat-active.svg' : './icon/repeat-none.svg';
                 }
             }
         });
